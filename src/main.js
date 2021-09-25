@@ -3,9 +3,9 @@ import Antd from "ant-design-vue";
 import App from "./App.vue";
 import * as antIcons from "@ant-design/icons-vue";
 import "ant-design-vue/dist/antd.css";
-import Home from './components/Home.vue'
-import Login from './components/Login.vue'
-import NotFoundPage from './components/NotFoundPage.vue'
+import Home from "./components/Home.vue";
+import Login from "./components/Login.vue";
+import NotFoundPage from "./components/NotFoundPage.vue";
 
 const routes = {
   "/": Home,
@@ -20,8 +20,10 @@ const SimpleRouter = {
 
   computed: {
     CurrentComponent() {
-      let userID =  localStorage.getItem('userID');
-      if(userID) {
+      let userID = localStorage.getItem("userID");
+      if (this.currentRoute === "/login" && userID) {
+        return routes["/"];
+      } else if (userID) {
         return routes[this.currentRoute] || NotFoundPage;
       } else {
         return routes["/login"];
