@@ -65,11 +65,36 @@ export default defineComponent({
     return { ...toRefs(state) };
   },
 
-  components: {
-    CheckSquareTwoTone,
-    CalendarOutlined,
-    AppstoreOutlined,
-    SettingOutlined,
+  data() {
+    return {
+      menuList: [
+        {
+          key: "1",
+          icon: 'CheckSquareTwoTone',
+          title: "待办事项",
+        },
+        {
+          key: "2",
+          icon: 'EditTwoTone',
+          title: "会议纪要",
+        },
+        {
+          key: "3",
+          icon: 'SnippetsTwoTone',
+          title: "简单看板",
+        },
+        {
+          key: "4",
+          icon: 'FundTwoTone',
+          title: "数据趋势",
+        },
+        {
+          key: "5",
+          icon: 'Html5TwoTone',
+          title: "前端注意事项",
+        },
+      ],
+    };
   },
 });
 </script>
