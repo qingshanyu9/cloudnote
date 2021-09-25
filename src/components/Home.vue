@@ -1,26 +1,30 @@
 <script setup>
-import { ref } from "vue";
-
-defineProps({
-  msg: String,
-});
-
-const count = ref(0);
+import SiderMenu from "./SiderMenu.vue";
+import TodoList from "./TodoList.vue";
 </script>
 
 <template>
   <a-layout id="components-layout">
-    <a-layout-header>Header</a-layout-header>
     <a-layout>
-      <a-layout-sider>Sider</a-layout-sider>
-      <a-layout-content>Content</a-layout-content>
+      <a-layout-sider class="layout-sider">
+        <SiderMenu></SiderMenu>
+      </a-layout-sider>
+      <a-layout-content class="layout-content">
+        <TodoList></TodoList>
+      </a-layout-content>
     </a-layout>
-    <a-layout-footer>Footer</a-layout-footer>
   </a-layout>
 </template>
 
 <style scoped>
 #components-layout {
   height: 100%;
+}
+#components-layout .layout-sider {
+  background-color: #fafafa;
+}
+
+#components-layout .layout-content {
+  background-color: #fff;
 }
 </style>
