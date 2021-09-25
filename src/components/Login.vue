@@ -1,5 +1,6 @@
 <script>
 import { defineComponent, reactive, toRaw } from "vue";
+import { message } from 'ant-design-vue';
 import APIS from "../common/apis";
 export default defineComponent({
   setup() {},
@@ -27,26 +28,43 @@ export default defineComponent({
         mode: "cors",
         method: "POST",
       };
-      // url (必须), init对象 (可选)
+      let key = "login";
+      message.loading({
+        content: '正在登陆...',
+        key,
+      });
       fetch(APIS.AUTH_VERIFY, init)
         .then(function (res) {
-          // fetch第一次拿到的是整个Response对象，要调用json()方法转成含有json数据的Promise
           return res.json();
         })
         .then(function (json) {
           console.log(json);
-          let { errcode } = json;
+          let { errcode, errmessage = "登陆失败" } = json;
           if (Number(errcode) === 200) {
             // 成功
+            message.success({
+              content: '登陆成功!',
+              key,
+              duration: 2,
+            });
             window.localStorage.setItem("userID", json.id);
             window.location.replace("http://localhost:3000");
           } else {
             // 失败
+            message.error({
+              content: errmessage,
+              key,
+              duration: 2,
+            });
           }
           return json;
         })
         .catch(function (err) {
-          // 中途任何地方出错...在此处理
+            message.error({
+              content: "网络异常",
+              key,
+              duration: 2,
+            });
         });
     },
     onRegister() {
@@ -64,7 +82,11 @@ export default defineComponent({
         mode: "cors",
         method: "POST",
       };
-      // url (必须), init对象 (可选)
+      let key = "register";
+      message.loading({
+        content: '正在注册...',
+        key,
+      });
       fetch(APIS.AUTH_SIGN, init)
         .then(function (res) {
           // fetch第一次拿到的是整个Response对象，要调用json()方法转成含有json数据的Promise
@@ -72,18 +94,32 @@ export default defineComponent({
         })
         .then((json) => {
           console.log(json);
-          let { errcode } = json;
+          let { errcode, errmessage = "注册失败" } = json;
           if (Number(errcode) === 200) {
             // 成功
             let { id } = json;
+            message.success({
+              content: '注册成功!',
+              key,
+              duration: 2,
+            });
             window.localStorage.setItem("userID", json.id);
             window.location.replace("http://localhost:3000");
           } else {
             // 失败
+            message.error({
+              content: errmessage,
+              key,
+              duration: 2,
+            });
           }
         })
         .catch(function (err) {
-          // 中途任何地方出错...在此处理
+            message.error({
+              content: "网络异常",
+              key,
+              duration: 2,
+            });
         });
       console.log("onRegister", this.account, this.password);
     },
