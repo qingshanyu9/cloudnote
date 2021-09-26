@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 
 // 连接数据库
-const sequelize = new Sequelize('nodes', 'account', 'password', {
+const sequelize = new Sequelize('nodes', 'nodes', '620dfafd79', {
     host: 'localhost',
     dialect: 'mysql', // 这里可以改成任意一种关系型数据库
 
@@ -54,5 +54,9 @@ module.exports = {
                 id: obj.nodeid
             }
         })
+    },
+    
+    findAllCount() {
+        return contextModule.findAll()
     }
 }

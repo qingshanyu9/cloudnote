@@ -47,7 +47,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             userModle.findOne({ account: obj.account, password: obj.password }, (err, docs) => {
                 if (!err) {
-                    resolve(docs._id.toString())
+                    resolve(docs)
                 } else {
                     reject(false)
                 }
@@ -58,9 +58,10 @@ module.exports = {
     // 获取所有笔记粗略信息
     findNode(obj) {
         return new Promise(function (resolve, reject) {
-            userModle.findById(obj._id, (err, docs) => {
+            userModle.findById(obj._id,(err, docs) => {
                 // console.log(typeof obj._id);
                 if (!err) {
+                    console.log(obj._id,docs)
                     resolve(docs.node)
                 } else {
                     reject(err)
@@ -85,7 +86,7 @@ module.exports = {
                         }
                     }
                     docs.save()
-                    resolve(true)
+                    resolve(obj.id)
                 } else {
                     reject(err)
                 }
@@ -134,6 +135,47 @@ module.exports = {
                 if (!err) {
                     docs = deleteChildren(docs, obj.nodeid)
                     docs.save()
+                    resolve(true)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
+    // 寻找所有的账户数量
+    findAllCount() {
+        return new Promise(function (resolve, reject) {
+            userModle.find((err, docs) => {
+                resolve(docs)
+            })
+        })
+    },
+    // 编辑用户
+    editUser(obj) {
+        return new Promise(function (resolve, reject) {
+            userModle.findById(obj._id, (err, docs) => {
+                if (!err) {
+                    console.log(obj._id)
+                    try{
+                       docs.name = obj.name
+                        docs.password = obj.password
+                        docs.save()
+                        resolve(true) 
+                    } catch(error) {
+                        resolve(false)
+                    }
+                    
+                }
+                resolve(false)
+            })
+        })
+    },
+    // 删除用户
+    deleteUser(obj) {
+        return new Promise(function (resolve, reject) {
+            userModle.deleteOne({ _id: obj._id }, (err, docs) => {
+                console.log(docs);
+                if (!err) {
                     resolve(true)
                 } else {
                     reject(err)
