@@ -46,6 +46,9 @@ export default defineComponent({
 
   mounted() {
     this.getUserAllNotes();
+    document.addEventListener("onDelNote", (params) =>
+      this.delMenuItem(params)
+    );
   },
 
   data() {
@@ -81,6 +84,11 @@ export default defineComponent({
   },
 
   methods: {
+    delMenuItem(params) {
+      let { noteID } = params.detail;
+      const delIndex = this.menuList.findIndex((item) => item.id == noteID);
+      this.menuList.splice(delIndex, 1);
+    },
     async onAddMenuItem() {
       // 创建文件，获得id 推入列表
       const { id } = await this.createNewNote();
