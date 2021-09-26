@@ -12,7 +12,7 @@
       </div>
     </div>
     <div id="sider_handleList">
-      <SearchOutlined title="打开搜索框" />
+      <SearchOutlined title="打开搜索框" @click="search_showModal" />
       <icon-font type="icon-gengduoguanxi" title="页面关系图" />
       <icon-font type="icon-shandianjiaji" title="今日速记" />
       <icon-font type="icon-bangzhu" title="帮助" />
@@ -22,16 +22,16 @@
     <div id="publicPage" class="page">
       <div class="page-title">
         <span>公共页面</span>
-        <span><PlusOutlined /></span>
+        <span><PlusOutlined @click="addPage('public')" /></span>
       </div>
-      <Page />
+      <Page :pagelist="pageList.public" />
     </div>
     <div id="myPage" class="page">
       <div class="page-title">
         <span>私有页面</span>
-        <span><PlusOutlined /></span>
+        <span><PlusOutlined @click="addPage('private')" /></span>
       </div>
-      <Page />
+      <Page :pagelist="pageList.private" />
     </div>
     <div id="silder_bottom">
       <div title="删除的页面都在垃圾桶">
@@ -43,6 +43,19 @@
         <span>模板中心</span>
       </div>
     </div>
+    <a-modal
+      v-model:visible="search_visible"
+      @ok="search_handleOk"
+      :closable="false"
+      :footer="null"
+    >
+      <a-input-search
+        v-model:value="value"
+        placeholder="在yodn的团队空间 中搜索"
+        style="width: 100%; border: none"
+        @search="onSearch"
+      />
+    </a-modal>
   </div>
 </template>
 <script>
@@ -54,7 +67,7 @@ import {
   EllipsisOutlined,
   createFromIconfontCN,
 } from "@ant-design/icons-vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, reactive } from "vue";
 import Page from "./Page.vue";
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_2834657_08igj41drhyo.js",
@@ -68,6 +81,35 @@ export default defineComponent({
     EllipsisOutlined,
     Page,
     IconFont,
+  },
+  setup() {
+    const pageList = reactive({
+      collect: [],
+      public: [],
+      private: [],
+    });
+    const search_visible = ref(false);
+    const search_showModal = () => {
+      search_visible.value = true;
+    };
+
+    const search_handleOk = (e) => {
+      search_visible.value = false;
+    };
+    const addPage = (e) => {
+      let newPage = {
+        icon: "icon-icon19",
+        text: "新页面",
+      };
+      pageList[e].push(newPage);
+    };
+    return {
+      search_visible,
+      search_showModal,
+      search_handleOk,
+      pageList,
+      addPage,
+    };
   },
 });
 </script>

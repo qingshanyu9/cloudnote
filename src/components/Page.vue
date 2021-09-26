@@ -1,6 +1,19 @@
 <template>
   <ul class="myPage">
-    <li>
+    <li v-for="item in pagelist" :key="item.text">
+      <div class="page_left">
+        <span class="left_1"><RightOutlined /></span>
+        <span class="left_2"
+          ><icon-font :type="item.icon" :title="item.text"
+        /></span>
+        <span>{{ item.text }}</span>
+      </div>
+      <div class="page_right">
+        <span><EllipsisOutlined /></span>
+        <span><PlusOutlined /></span>
+      </div>
+    </li>
+    <!-- <li>
       <div class="page_left">
         <span class="left_1"><RightOutlined /></span>
         <span class="left_2"><GithubOutlined /></span>
@@ -43,7 +56,7 @@
         <span><EllipsisOutlined /></span>
         <span><PlusOutlined /></span>
       </div>
-    </li>
+    </li> -->
   </ul>
 </template>
 <script>
@@ -52,15 +65,30 @@ import {
   EllipsisOutlined,
   GithubOutlined,
   RightOutlined,
+  createFromIconfontCN,
 } from "@ant-design/icons-vue";
 import { defineComponent } from "vue";
+const IconFont = createFromIconfontCN({
+  scriptUrl: "//at.alicdn.com/t/font_2834657_08igj41drhyo.js",
+});
 export default defineComponent({
+  props: {
+    pagelist: Object,
+  },
   components: {
     PlusOutlined,
     EllipsisOutlined,
     GithubOutlined,
     RightOutlined,
+    IconFont,
   },
+  // setup(props) {
+  //   // let pagelist = props.pagelist;
+  //   console.log(props);
+  //   return {
+  //     props,
+  //   };
+  // },
 });
 </script>
 <style lang="less" scoped>
