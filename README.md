@@ -71,7 +71,7 @@ $ yarn dev
 
 | API      | 输入    | 备注             | 请求方式 | 返回值  |
 | -------- | ------- | ---------------- | -------- | ------- |
-| /addnode | id      | 账户唯一标识符   | POST     | boolean |
+| /addnode | id      | 账户唯一标识符   | POST     |          |
 |          | title   | 文章标题         |          |         |
 |          | context | 文章内容         |          |         |
 |          | parent  | 文件夹（可不填） |          |         |
@@ -79,7 +79,6 @@ $ yarn dev
 `{`
     `"errcode": 200,`
     `"errmessage": "",`
-    `"id": true`
 `}`
 
 ## 增加文件夹
