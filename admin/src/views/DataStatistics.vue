@@ -2,12 +2,13 @@
  * @Description: 
  * @Autor: Huang Yingming
  * @LastEditors: Huang Yingming
- * @LastEditTime: 2021-09-06 09:59:26
+ * @LastEditTime: 2021-09-26 15:58:09
 -->
 <template>
   <div>
     <data-bread-crumb class="shadowsBox"></data-bread-crumb>
-    <data-overview class="shadowsBox" :list="list"></data-overview>
+    <data-overview class="shadowsBox"
+                   :list="list"></data-overview>
   </div>
 </template>
 
@@ -16,12 +17,12 @@ import DataBreadCrumb from "../components/content/DataStatistics/DataBreadCrumb.
 import DataOverview from "../components/content/DataStatistics/DataOverview.vue";
 export default {
   components: { DataBreadCrumb, DataOverview },
-  created() {
+  created () {
     this.axios
-      .get(this.$store.state.requestURL + "/videofavorite")
+      .get(this.$store.state.requestURL + "/userplace")
       .then((result) => {
         if (result.status == 200) {
-          result = result.data.data;
+          result = result.data;
           for (let i in result) {
             this.list.push({
               name: i,
@@ -29,9 +30,10 @@ export default {
             });
           }
         }
+        console.log(this.list);
       });
   },
-  data() {
+  data () {
     return {
       list: [],
     };

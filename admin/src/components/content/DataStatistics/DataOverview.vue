@@ -2,15 +2,13 @@
  * @Description: 
  * @Autor: Huang Yingming
  * @LastEditors: Huang Yingming
- * @LastEditTime: 2021-09-06 09:58:23
+ * @LastEditTime: 2021-09-26 15:48:44
 -->
 <template>
   <div>
-    <data-draw
-      :title="'受喜爱的视频'"
-      :pirctureId="'favorite'"
-      :list="list"
-    ></data-draw>
+    <data-draw :title="'地域比重'"
+               :pirctureId="'favorite'"
+               :list="list"></data-draw>
   </div>
 </template>
 

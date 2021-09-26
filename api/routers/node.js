@@ -2,7 +2,7 @@
  * @Description: 
  * @Autor: Huang Yingming
  * @LastEditors: Huang Yingming
- * @LastEditTime: 2021-09-26 14:49:30
+ * @LastEditTime: 2021-09-26 13:25:24
  */
 const router = require('koa-router')()
 const userdb = require('../tool/mongoose')
@@ -36,11 +36,12 @@ router.post('/addnode', async ctx => {
         // console.log();
         await userdb.addNode({ _id: body.id, id: result.dataValues.id, parentTitle: body.parent || '' })
           .then(result => {
+          console.log(result)
             if (result) {
               ctx.response.body = {
                 errcode: 200,
                 errmessage: '',
-                nodeid: result.dataValues.id
+                nodeid: result
               }
             } else {
               ctx.response.body = {

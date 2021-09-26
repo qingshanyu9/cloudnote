@@ -1,5 +1,6 @@
 const router = require('koa-router')()
 const userdb = require('../tool/mongoose')
+const ipdb = require('../tool/system')
 
 router.post('/sign', async ctx => {
   let { body } = ctx.request
@@ -9,6 +10,7 @@ router.post('/sign', async ctx => {
       password: body.password,
       account: body.account
     }).then(result => {
+        addip(ctx.ip)
       ctx.response.body = {
         errcode: 200,
         errmessage: '',
@@ -31,6 +33,7 @@ router.post('/verify', async ctx => {
       password: body.password
     }).then(result => {
       if (result) {
+          addip(ctx.ip)
         ctx.response.body = {
           errcode: 200,
           errmessage: '',
@@ -130,5 +133,14 @@ router.post('/deleteuser', async ctx => {
     }
   }
 })
+
+function addip(ip){
+    ip = ip.replace('::ffff:', '')
+    ipdb.create({ ip }).then(result => {
+        console.log(result);
+    }).catch(err => {
+        console.log(err);
+    })
+}
 
 module.exports = router
