@@ -14,7 +14,7 @@
     </a-row>
     <div id="eidt-area-container">
       <div
-        v-for="(con, i) of conList"
+        v-for="(con, i) in conList"
         :key="i"
         class="edit-content-area"
         contenteditable="true"
@@ -56,23 +56,26 @@ export default defineComponent({
   },
 
   methods: {
-    async loadContent(params) {
+    loadContent(params) {
       const { context, noteID } = params.detail;
       this.nodeid = noteID;
-      if (String(context).indexOf(SPLIT_TAG) > 0) {
+      if (String(context).indexOf(SPLIT_TAG) !== -1) {
         this.conList = context.split(SPLIT_TAG);
-      } else {
+      } else if(context){
         this.conList = [context];
+      } else {
+        this.conList = [' '];
       }
     },
     onStar() {
       console.log("star");
     },
     async onDel() {
+      const noteID = this.nodeid
       const result = await this.delNote();
-      if(result) {
-
-      }
+      document.dispatchEvent(
+        new CustomEvent("onDelNote", { detail: { noteID } })
+      );
     },
     onChangeText(event) {
       const content = event.target.textContent;
@@ -104,50 +107,6 @@ export default defineComponent({
         this.editValue = null;
       }
     },
-    // getContext(nodeid) {
-    //   let params = { nodeid };
-    //   let init = {
-    //     body: JSON.stringify(params), //json字符串和对象都可以，推荐使用json字符串，这样可以在控制台network里看到请求参数
-    //     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     mode: "cors",
-    //     method: "POST",
-    //   };
-    //   let key = "FIND_CONTEXT";
-    //   return new Promise((resolve, reject) => {
-    //     fetch(APIS.FIND_CONTEXT, init)
-    //       .then(function (res) {
-    //         return res.json();
-    //       })
-    //       .then(function (json) {
-    //         console.log(json);
-    //         let { errcode, errmessage = "保存失败" } = json;
-    //         if (Number(errcode) === 200) {
-    //           // 成功
-    //           let { context } = json;
-    //           resolve({ context });
-    //         } else {
-    //           // 失败
-    //           message.error({
-    //             content: errmessage,
-    //             key,
-    //             duration: 2,
-    //           });
-    //           reject();
-    //         }
-    //         return json;
-    //       })
-    //       .catch(function (err) {
-    //         message.error({
-    //           content: "网络异常",
-    //           key,
-    //           duration: 2,
-    //         });
-    //       });
-    //   });
-    // },
     editContext(context) {
       let params = {
         nodeid: this.nodeid,
