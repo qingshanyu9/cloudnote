@@ -1,11 +1,7 @@
-import { createApp, h } from "vue";
+import { createApp } from "vue";
 import Antd from "ant-design-vue";
 import App from "./App.vue";
-import * as antIcons from "@ant-design/icons-vue";
 import "ant-design-vue/dist/antd.css";
-import Home from "./components/Home.vue";
-import Login from "./components/Login.vue";
-import NotFoundPage from "./components/NotFoundPage.vue";
 
 const routes = {
   "/": Home,

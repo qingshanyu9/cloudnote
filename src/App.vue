@@ -1,16 +1,14 @@
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
-import Home from './components/Home.vue'
-import Login from './components/Login.vue'
+import HelloWorld from "./components/HelloWorld.vue";
+import Home from "./components/Home.vue";
 </script>
 
 <template>
-<!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-<!-- <HelloWorld msg="Hello Vue 3 + Vite"></HelloWorld> -->
-<Home></Home>
-<Login></Login>
+  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+  <!-- <HelloWorld msg="Hello Vue 3 + Vite"></HelloWorld> -->
+  <Home></Home>
 </template>
 
 <style>
@@ -22,5 +20,13 @@ import Login from './components/Login.vue'
   color: #333;
   width: 100%;
   height: 100%;
+}
+* {
+  padding: 0;
+  margin: 0;
+  user-select: none;
+}
+ul {
+  list-style: none;
 }
 </style>
