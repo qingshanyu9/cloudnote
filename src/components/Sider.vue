@@ -19,20 +19,30 @@
       <icon-font type="icon-guidang" title="打开消息箱" />
       <EllipsisOutlined />
     </div>
+    <!-- <div id="collectPage" class="page" v-if="pageList.collect.length > 0">
+      <div class="page-title">
+        <span>收藏页面</span>
+        <span><PlusOutlined @click="addPage(pageList.collect)" /></span>
+      </div>
+      <Page :pagelist="pageList.collect" @addPage="addPage(pageList.collect)" />
+    </div>
     <div id="publicPage" class="page">
       <div class="page-title">
         <span>公共页面</span>
-        <span><PlusOutlined @click="addPage('public')" /></span>
+        <span><PlusOutlined @click="addPage(pageList.public)" /></span>
       </div>
-      <Page :pagelist="pageList.public" />
+      <Page :pagelist="pageList.public" @addPage="addPage(pageList.public)" />
     </div>
     <div id="myPage" class="page">
       <div class="page-title">
         <span>私有页面</span>
-        <span><PlusOutlined @click="addPage('private')" /></span>
+        <span><PlusOutlined @click="addPage(pageList.private)" /></span>
       </div>
-      <Page :pagelist="pageList.private" />
-    </div>
+      <Page :pagelist="pageList.private" @addPage="addPage(pageList.private)" />
+    </div> -->
+    <Page msg="collect" :pagelist="pageList" />
+    <Page msg="public" :pagelist="pageList" />
+    <Page msg="private" :pagelist="pageList" />
     <div id="silder_bottom">
       <div title="删除的页面都在垃圾桶">
         <span><icon-font type="icon-icon25" /></span>
@@ -70,7 +80,7 @@ import {
 import { defineComponent, ref, reactive } from "vue";
 import Page from "./Page.vue";
 const IconFont = createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/font_2834657_08igj41drhyo.js",
+  scriptUrl: "//at.alicdn.com/t/font_2834657_75h2fk6wx0y.js",
 });
 export default defineComponent({
   components: {
@@ -83,11 +93,6 @@ export default defineComponent({
     IconFont,
   },
   setup() {
-    const pageList = reactive({
-      collect: [],
-      public: [],
-      private: [],
-    });
     const search_visible = ref(false);
     const search_showModal = () => {
       search_visible.value = true;
@@ -96,19 +101,16 @@ export default defineComponent({
     const search_handleOk = (e) => {
       search_visible.value = false;
     };
-    const addPage = (e) => {
-      let newPage = {
-        icon: "icon-icon19",
-        text: "新页面",
-      };
-      pageList[e].push(newPage);
-    };
+    const pageList = reactive({
+      collect: [],
+      public: [],
+      private: [],
+    });
     return {
       search_visible,
       search_showModal,
       search_handleOk,
       pageList,
-      addPage,
     };
   },
 });
