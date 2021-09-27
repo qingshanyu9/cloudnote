@@ -39,6 +39,7 @@ import Content from "./Content.vue";
   }
   .ant-layout-sider {
     background: #fafafa;
+    overflow: hidden;
   }
 }
 </style>

@@ -26,101 +26,50 @@
           <span></span>
         </div>
       </li>
-      <li v-for="item in pagelist[msg]" :key="item.text">
-        <div class="page_left">
-          <span class="left_1">
-            <RightOutlined v-if="item.children.length > 0" />
-            <icon-font type="icon-dian" />
-          </span>
-          <span class="left_2">
-            <icon-font :type="item.icon" :title="item.text"
-          /></span>
-          <span>{{ item.text }}</span>
-        </div>
-        <div class="page_right">
-          <span><EllipsisOutlined /></span>
-          <span><PlusOutlined @click="addPage(item.children)" /></span>
-        </div>
-      </li>
+      <template v-for="item in pagelist[msg]" :key="item.text">
+        <li>
+          <div class="page_left">
+            <span class="left_1">
+              <RightOutlined
+                v-if="item.children.length > 0 && !item.show"
+                @click="item.show = !item.show"
+              />
+              <DownOutlined
+                v-else-if="item.children.length > 0 && item.show"
+                @click="item.show = !item.show"
+              />
+              <icon-font type="icon-dian" v-else />
+            </span>
+            <span class="left_2">
+              <icon-font :type="item.icon" :title="item.text"
+            /></span>
+            <span>{{ item.text }}</span>
+          </div>
+          <div class="page_right">
+            <span><EllipsisOutlined /></span>
+            <span><PlusOutlined @click="addPage(item.children, item)" /></span>
+          </div>
+        </li>
+        <ul v-if="item && item.show && item.children.length > 0">
+          <li v-for="itm in item.children" :key="itm.text" class="page_child">
+            <div class="page_left">
+              <span class="left_1">
+                <icon-font type="icon-dian" />
+              </span>
+              <span class="left_2">
+                <icon-font :type="itm.icon" />
+              </span>
+              <span>{{ itm.text }}</span>
+            </div>
+            <div class="page_right">
+              <span><EllipsisOutlined /></span>
+              <span></span>
+            </div>
+          </li>
+        </ul>
+      </template>
     </ul>
   </div>
-  <!--<ul class="myPage">
-    <li
-      v-if="pagelist.length === 0"
-      style="color: #999; font-size: 12px"
-      @click="$emit('addPage')"
-    >
-      <div class="page_left">
-        <span class="left_1"><PlusOutlined /></span>
-        <span class="left_2"> </span>
-        <span>创建新页面</span>
-      </div>
-      <div class="page_right">
-        <span></span>
-        <span></span>
-      </div>
-    </li>
-    <li v-for="item in pagelist" :key="item.text">
-      <div class="page_left">
-        <span class="left_1">
-          <RightOutlined v-if="item.children.length > 0" />
-          <icon-font type="icon-dian" />
-        </span>
-        <span class="left_2">
-          <icon-font :type="item.icon" :title="item.text"
-        /></span>
-        <span>{{ item.text }}</span>
-      </div>
-      <div class="page_right">
-        <span><EllipsisOutlined /></span>
-        <span><PlusOutlined @click="$emit('addPage', item.children)" /></span>
-      </div>
-    </li>
-    <li>
-      <div class="page_left">
-        <span class="left_1"><RightOutlined /></span>
-        <span class="left_2"><GithubOutlined /></span>
-        <span>开发文档</span>
-      </div>
-      <div class="page_right">
-        <span><EllipsisOutlined /></span>
-        <span><PlusOutlined /></span>
-      </div>
-    </li>
-    <li>
-      <div class="page_left">
-        <span class="left_1"><RightOutlined /></span>
-        <span class="left_2"><GithubOutlined /></span>
-        <span>开发文档</span>
-      </div>
-      <div class="page_right">
-        <span><EllipsisOutlined /></span>
-        <span><PlusOutlined /></span>
-      </div>
-    </li>
-    <li>
-      <div class="page_left">
-        <span class="left_1"><RightOutlined /></span>
-        <span class="left_2"><GithubOutlined /></span>
-        <span>开发文档</span>
-      </div>
-      <div class="page_right">
-        <span><EllipsisOutlined /></span>
-        <span><PlusOutlined /></span>
-      </div>
-    </li>
-    <li>
-      <div class="page_left">
-        <span class="left_1"><RightOutlined /></span>
-        <span class="left_2"><GithubOutlined /></span>
-        <span>开发文档</span>
-      </div>
-      <div class="page_right">
-        <span><EllipsisOutlined /></span>
-        <span><PlusOutlined /></span>
-      </div>
-    </li> 
-  </ul>-->
 </template>
 <script>
 import {
@@ -128,6 +77,7 @@ import {
   EllipsisOutlined,
   GithubOutlined,
   RightOutlined,
+  DownOutlined,
   createFromIconfontCN,
 } from "@ant-design/icons-vue";
 import { defineComponent } from "vue";
@@ -144,17 +94,21 @@ export default defineComponent({
     EllipsisOutlined,
     GithubOutlined,
     RightOutlined,
+    DownOutlined,
     IconFont,
   },
   setup() {
-    const addPage = (obj) => {
-      console.log(obj, 111);
+    const addPage = (obj, par) => {
+      // console.log(obj, 111);
       let newPage = {
         icon: "icon-icon19",
         text: "新页面",
+        show: true,
         children: [],
       };
       obj.push(newPage);
+      // console.log(par);
+      if (par) par.show = true;
     };
     return {
       addPage,
@@ -237,5 +191,8 @@ export default defineComponent({
       }
     }
   }
+}
+.page_child {
+  padding: 0 30px !important;
 }
 </style>

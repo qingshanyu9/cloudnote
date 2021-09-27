@@ -19,30 +19,11 @@
       <icon-font type="icon-guidang" title="打开消息箱" />
       <EllipsisOutlined />
     </div>
-    <!-- <div id="collectPage" class="page" v-if="pageList.collect.length > 0">
-      <div class="page-title">
-        <span>收藏页面</span>
-        <span><PlusOutlined @click="addPage(pageList.collect)" /></span>
-      </div>
-      <Page :pagelist="pageList.collect" @addPage="addPage(pageList.collect)" />
+    <div id="page">
+      <Page msg="collect" :pagelist="pageList" />
+      <Page msg="public" :pagelist="pageList" />
+      <Page msg="private" :pagelist="pageList" />
     </div>
-    <div id="publicPage" class="page">
-      <div class="page-title">
-        <span>公共页面</span>
-        <span><PlusOutlined @click="addPage(pageList.public)" /></span>
-      </div>
-      <Page :pagelist="pageList.public" @addPage="addPage(pageList.public)" />
-    </div>
-    <div id="myPage" class="page">
-      <div class="page-title">
-        <span>私有页面</span>
-        <span><PlusOutlined @click="addPage(pageList.private)" /></span>
-      </div>
-      <Page :pagelist="pageList.private" @addPage="addPage(pageList.private)" />
-    </div> -->
-    <Page msg="collect" :pagelist="pageList" />
-    <Page msg="public" :pagelist="pageList" />
-    <Page msg="private" :pagelist="pageList" />
     <div id="silder_bottom">
       <div title="删除的页面都在垃圾桶">
         <span><icon-font type="icon-icon25" /></span>
@@ -63,7 +44,6 @@
         v-model:value="value"
         placeholder="在yodn的团队空间 中搜索"
         style="width: 100%; border: none"
-        @search="onSearch"
       />
     </a-modal>
   </div>
@@ -154,6 +134,12 @@ export default defineComponent({
     }
   }
 }
+#page {
+  height: calc(100% - 122px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .page {
   display: flex;
   flex-direction: column;
@@ -189,6 +175,7 @@ export default defineComponent({
   left: 0;
   height: 50px;
   border-top: 1px solid #e9e9e9;
+  background: #fafafa;
 
   div {
     width: 50%;
@@ -206,5 +193,22 @@ export default defineComponent({
   div:first-child {
     border-right: 1px solid #e9e9e9;
   }
+}
+//滚动条背景高度宽度
+::-webkit-scrollbar {
+  width: 8px;
+  // background: #d2cfcf;
+  // background: red;
+  // color: yellow;
+}
+/*定义滚动条轨道 内阴影+圆角*/
+// ::-webkit-scrollbar-track {
+//   border-radius: 10px;
+// }
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #d2cfcf;
 }
 </style>
