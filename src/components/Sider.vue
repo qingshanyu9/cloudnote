@@ -2,17 +2,25 @@
   <div id="sider">
     <div id="user">
       <div class="user_avater">
-        <a-avatar shape="square">
+        <!-- <a-avatar shape="square">
           <template #icon><UserOutlined /></template>
-        </a-avatar>
-        <span class="user_name">yodn的团队空间</span>
+        </a-avatar> -->
+        <a-avatar size="small" shape="square" style="background: #cf5659"
+          >Y</a-avatar
+        >
+        <span class="user_name">Yodn的团队空间</span>
       </div>
       <div class="btn">
         <DownOutlined />
       </div>
     </div>
     <div id="sider_handleList">
-      <SearchOutlined title="打开搜索框" @click="search_showModal" />
+      <!-- <SearchOutlined title="打开搜索框" @click="search_showModal" /> -->
+      <icon-font
+        type="icon-search2"
+        title="打开搜索框"
+        @click="search_showModal"
+      />
       <icon-font type="icon-gengduoguanxi" title="页面关系图" />
       <icon-font type="icon-shandianjiaji" title="今日速记" />
       <icon-font type="icon-bangzhu" title="帮助" />
@@ -41,7 +49,7 @@
       :footer="null"
     >
       <a-input-search
-        v-model:value="value"
+        v-model:value="search_value"
         placeholder="在yodn的团队空间 中搜索"
         style="width: 100%; border: none"
       />
@@ -60,7 +68,7 @@ import {
 import { defineComponent, ref, reactive } from "vue";
 import Page from "./Page.vue";
 const IconFont = createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/font_2834657_75h2fk6wx0y.js",
+  scriptUrl: "//at.alicdn.com/t/font_2834657_5xkfldfukt.js",
 });
 export default defineComponent({
   components: {
@@ -73,6 +81,7 @@ export default defineComponent({
     IconFont,
   },
   setup() {
+    const search_value = ref("");
     const search_visible = ref(false);
     const search_showModal = () => {
       search_visible.value = true;
@@ -87,6 +96,7 @@ export default defineComponent({
       private: [],
     });
     return {
+      search_value,
       search_visible,
       search_showModal,
       search_handleOk,

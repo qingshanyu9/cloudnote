@@ -43,10 +43,18 @@
             <span class="left_2">
               <icon-font :type="item.icon" :title="item.text"
             /></span>
-            <span>{{ item.text }}</span>
+            <span
+              ><input
+                :id="item.page_id"
+                class="pageInput"
+                disabled
+                :value="item.text"
+                @keydown.enter="enterReName(item)"
+                @blur="enterReName(item)"
+            /></span>
           </div>
           <div class="page_right">
-            <span><EllipsisOutlined /></span>
+            <SiderDropdown :item="item" @rename="rename(item)" />
             <span><PlusOutlined @click="addPage(item.children, item)" /></span>
           </div>
         </li>
@@ -59,10 +67,18 @@
               <span class="left_2">
                 <icon-font :type="itm.icon" />
               </span>
-              <span>{{ itm.text }}</span>
+              <span
+                ><input
+                  :id="itm.page_id"
+                  class="pageInput"
+                  disabled
+                  :value="itm.text"
+                  @keydown.enter="enterReName(itm)"
+                  @blur="enterReName(itm)"
+              /></span>
             </div>
             <div class="page_right">
-              <span><EllipsisOutlined /></span>
+              <SiderDropdown :item="itm" @rename="rename(itm)" />
               <span></span>
             </div>
           </li>
@@ -81,6 +97,7 @@ import {
   createFromIconfontCN,
 } from "@ant-design/icons-vue";
 import { defineComponent } from "vue";
+import SiderDropdown from "./SiderDropdown.vue";
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_2834657_75h2fk6wx0y.js",
 });
@@ -96,6 +113,7 @@ export default defineComponent({
     RightOutlined,
     DownOutlined,
     IconFont,
+    SiderDropdown,
   },
   setup() {
     const addPage = (obj, par) => {
@@ -104,19 +122,55 @@ export default defineComponent({
         icon: "icon-icon19",
         text: "新页面",
         show: true,
+        created_by: "Yodn",
+        created_time: Date.now(),
+        edited_by: "Yodn",
+        edited_time: Date.now(),
+        status: 1,
         children: [],
+        page_id: Number(
+          Math.random().toString().substr(3, length) + Date.now()
+        ).toString(36),
       };
       obj.push(newPage);
       // console.log(par);
       if (par) par.show = true;
     };
+    const rename = (item) => {
+      // console.log(item.page_id, 111);
+      let input = document.querySelector(`#${item.page_id}`);
+      // console.log(input.__proto__);
+      input.removeAttribute("disabled");
+      input.classList.add("rename");
+    };
+    const enterReName = (item) => {
+      let input = document.querySelector(`#${item.page_id}`);
+      input.setAttribute("disabled", "disabled");
+      input.classList.remove("rename");
+    };
     return {
       addPage,
+      rename,
+      enterReName,
     };
   },
 });
 </script>
 <style lang="less" scoped>
+.pageInput {
+  border: none;
+  background: unset;
+  height: 24px;
+  width: 100%;
+  color: unset;
+}
+.rename {
+  background: #fff;
+  border-radius: 4px;
+  height: 24px;
+  border: none;
+  color: #000;
+}
 .page {
   display: flex;
   flex-direction: column;
@@ -176,6 +230,7 @@ export default defineComponent({
     }
     .page_right {
       display: none;
+      min-width: 40px;
       span {
         padding: 2px;
         border-radius: 2px;
