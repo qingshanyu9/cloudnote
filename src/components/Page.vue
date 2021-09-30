@@ -1,20 +1,26 @@
 <template>
-  <div class="page" v-if="msg !== 'collect' || pagelist.collect.length > 0">
+  <div
+    class="page"
+    v-show="
+      type !== 0 ||
+      pagelist.filter((item) => item.type === type && item.status === 1)
+        .length > 0
+    "
+  >
     <div class="page-title">
       <span>{{
-        msg === "collect"
-          ? "收藏页面"
-          : msg === "public"
-          ? "公共页面"
-          : "私有页面"
+        type === 0 ? "收藏页面" : type === 1 ? "公共页面" : "私有页面"
       }}</span>
-      <span><PlusOutlined @click="addPage(pagelist[msg])" /></span>
+      <span><PlusOutlined @click="addPage" /></span>
     </div>
     <ul class="myPage">
       <li
-        v-if="pagelist[msg].length === 0"
+        v-show="
+          pagelist.filter((item) => item.type === type && item.status === 1)
+            .length === 0
+        "
         style="color: #999; font-size: 12px"
-        @click="addPage(pagelist[msg])"
+        @click="addPage"
       >
         <div class="page_left">
           <span class="left_1"><PlusOutlined /></span>
@@ -26,16 +32,27 @@
           <span></span>
         </div>
       </li>
-      <template v-for="item in pagelist[msg]" :key="item.text">
+      <template
+        v-for="item in pagelist.filter(
+          (item) => item.type === type && item.status === 1
+        )"
+        :key="item.text"
+      >
         <li>
           <div class="page_left">
             <span class="left_1">
               <RightOutlined
-                v-if="item.children.length > 0 && !item.show"
+                v-if="
+                  item.children.filter((item) => item.status === 1).length >
+                    0 && !item.show
+                "
                 @click="item.show = !item.show"
               />
               <DownOutlined
-                v-else-if="item.children.length > 0 && item.show"
+                v-else-if="
+                  item.children.filter((item) => item.status === 1).length >
+                    0 && item.show
+                "
                 @click="item.show = !item.show"
               />
               <icon-font type="icon-dian" v-else />
@@ -55,11 +72,15 @@
           </div>
           <div class="page_right">
             <SiderDropdown :item="item" @rename="rename(item)" />
-            <span><PlusOutlined @click="addPage(item.children, item)" /></span>
+            <span><PlusOutlined @click="addPage(item)" /></span>
           </div>
         </li>
-        <ul v-if="item && item.show && item.children.length > 0">
-          <li v-for="itm in item.children" :key="itm.text" class="page_child">
+        <ul v-show="item && item.show && item.children.length > 0">
+          <li
+            v-for="itm in item.children.filter((item) => item.status === 1)"
+            :key="itm.text"
+            class="page_child"
+          >
             <div class="page_left">
               <span class="left_1">
                 <icon-font type="icon-dian" />
@@ -79,7 +100,7 @@
             </div>
             <div class="page_right">
               <SiderDropdown :item="itm" @rename="rename(itm)" />
-              <span></span>
+              <!-- <span></span> -->
             </div>
           </li>
         </ul>
@@ -96,7 +117,7 @@ import {
   DownOutlined,
   createFromIconfontCN,
 } from "@ant-design/icons-vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 import SiderDropdown from "./SiderDropdown.vue";
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_2834657_75h2fk6wx0y.js",
@@ -104,7 +125,7 @@ const IconFont = createFromIconfontCN({
 export default defineComponent({
   props: {
     pagelist: Object,
-    msg: String,
+    type: String,
   },
   components: {
     PlusOutlined,
@@ -115,9 +136,12 @@ export default defineComponent({
     IconFont,
     SiderDropdown,
   },
-  setup() {
-    const addPage = (obj, par) => {
-      // console.log(obj, 111);
+  setup(props) {
+    const type = Number(props.type);
+    const pagelist = props.pagelist;
+    // const list = reactive(pagelist.filter((item) => item.type === type));
+    const addPage = (obj) => {
+      // console.log(obj, obj.page_id);
       let newPage = {
         icon: "icon-icon19",
         text: "新页面",
@@ -131,10 +155,16 @@ export default defineComponent({
         page_id: Number(
           Math.random().toString().substr(3, length) + Date.now()
         ).toString(36),
+        type: type,
+        parent_id: obj.page_id,
       };
-      obj.push(newPage);
-      // console.log(par);
-      if (par) par.show = true;
+      if (obj.page_id) {
+        obj.children.push(newPage);
+        obj.show = true;
+      } else {
+        // list.push(newPage);
+        pagelist.push(newPage);
+      }
     };
     const rename = (item) => {
       // console.log(item.page_id, 111);
@@ -142,13 +172,18 @@ export default defineComponent({
       // console.log(input.__proto__);
       input.removeAttribute("disabled");
       input.classList.add("rename");
+      input.select();
+      input.focus();
     };
     const enterReName = (item) => {
       let input = document.querySelector(`#${item.page_id}`);
       input.setAttribute("disabled", "disabled");
       input.classList.remove("rename");
+      input.blur();
     };
     return {
+      type,
+      // list,
       addPage,
       rename,
       enterReName,

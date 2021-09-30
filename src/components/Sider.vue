@@ -28,9 +28,9 @@
       <EllipsisOutlined />
     </div>
     <div id="page">
-      <Page msg="collect" :pagelist="pageList" />
-      <Page msg="public" :pagelist="pageList" />
-      <Page msg="private" :pagelist="pageList" />
+      <Page type="0" :pagelist="pageList" />
+      <Page type="1" :pagelist="pageList" />
+      <Page type="2" :pagelist="pageList" />
     </div>
     <div id="silder_bottom">
       <div title="删除的页面都在垃圾桶">
@@ -90,11 +90,30 @@ export default defineComponent({
     const search_handleOk = (e) => {
       search_visible.value = false;
     };
-    const pageList = reactive({
-      collect: [],
-      public: [],
-      private: [],
-    });
+    let index = 0;
+    const getPage_id = () => {
+      return Number(
+        Math.random().toString().substr(3, length) + Date.now() + ++index
+      ).toString(36);
+    };
+    // let list = [...".".repeat(3)].map((item, index) => {
+    //   item = new Object();
+    //   item.icon = "icon-icon19";
+    //   item.text = "新页面";
+    //   item.show = true;
+    //   item.created_by = "Yodn";
+    //   item.created_time = Date.now();
+    //   item.edited_by = "Yodn";
+    //   item.edited_time = Date.now();
+    //   item.status = 1;
+    //   item.children = [];
+    //   item.page_id = getPage_id();
+    //   item.parent_id = void 0;
+    //   item.type = index;
+    //   return item;
+    // });
+    // console.log(list);
+    const pageList = reactive([]);
     return {
       search_value,
       search_visible,
